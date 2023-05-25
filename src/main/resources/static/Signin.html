@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Signin System</title>
+  <link href="//lib.baomitu.com/layui/2.5.7/css/layui.min.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+    <div class="layui-logo">Signin System</div>
+    <!-- 头部区域（可配合layui已有的水平导航） -->
+    <ul class="layui-nav layui-layout-right">
+      <li class="layui-nav-item">
+        <a href="javascript:;">
+          <img src="https://mrhelloworld.com/resources/mrhelloworld/logo/avatar.jpg" class="layui-nav-img">
+          Sonryonha
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="welcome.html" target="container">PersonalCenter</a></dd>
+          <dd><a href="">Basics</a></dd>
+          <dd><a href="">SafeSet</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="">LogOut</a></li>
+    </ul>
+  </div>
+
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul class="layui-nav layui-nav-tree" lay-filter="test">
+        <li class="layui-nav-item layui-nav-itemed">
+          <a class="" href="javascript:;">Product</a>
+          <dl class="layui-nav-child">
+            <dd><a href="javascript:;">List</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">Solution</a>
+          <dl class="layui-nav-child">
+            <dd><a href="javascript:;">List</a></dd>
+          </dl>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <iframe src="welcome.html" name="container" width="100%" height="100%"></iframe>
+  </div>
+
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    https://Sonryonha.work - 杨辉
+  </div>
+</div>
+<script src="//lib.baomitu.com/layui/2.5.7/layui.min.js"></script>
+<script>
+  //JavaScript代码区域
+  layui.use('element', function () {
+    var element = layui.element;
+
+  });
+</script>
+</body>
+</html>

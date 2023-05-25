@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>个人中心</title>
+  <link href="//lib.baomitu.com/layui/2.5.7/css/layui.min.css" rel="stylesheet">
+</head>
+<body>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+  <legend>Personal Center</legend>
+</fieldset>
+
+<div style="padding: 20px;">
+  <div class="layui-col-md3">
+    <div class="layui-tab layui-tab-card">
+      <ul class="layui-tab-title">
+        <li class="layui-this">Sign In</li>
+        <li>补签</li>
+        <li id="recordLi">签到记录</li>
+      </ul>
+      <div class="layui-tab-content">
+        <!-- 签到 -->
+        <div class="layui-tab-item layui-show">
+          <button type="button" class="layui-btn" id="signBtn">今日签到</button>
+          <hr/>
+          <p>您已签到&nbsp;<span style="color: red;" id="count">0</span>&nbsp;天</p>
+          <p>连续签到&nbsp;<span style="color: red;" id="continuous">0</span>&nbsp;天</p>
+        </div>
+        <!-- 补签 -->
+        <div class="layui-tab-item">
+          <div class="layui-inline">
+            <input type="text" class="layui-input" id="reissue" placeholder="请选择日期">
+          </div>
+          <button type="button" class="layui-btn" id="reissueBtn">补签</button>
+        </div>
+        <!-- 签到记录 -->
+        <div class="layui-tab-item">
+          <div class="layui-inline" id="record"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="//lib.baomitu.com/jquery/3.6.0/jquery.min.js"></script>
+<script src="//lib.baomitu.com/layui/2.5.7/layui.min.js"></script>
+<script src="//lib.baomitu.com/layui/2.5.7/lay/modules/element.min.js"></script>
+<script>
+  // 页面加载时获取当天签到情况以及连续签到次数和总签到次数
+  // 如果已签到则将签到按钮禁用
+  $(function () {
+    $.ajax({
+      url: "/sign/today",
+      type: "GET",
+      data: {"userId": 5}, // 模拟用户ID
+      dataType: "JSON",
+      success: function (result) {
+        // 设置总签到次数
+        $("#count").text(result.count);
+        // 设置连续签到次数
+        $("#continuous").text(result.continuous);
+        if (true == result.today) {
+          // 设置签到按钮文本
+          $("#signBtn").text("今日已签到");
+          // 禁用签到按钮
+          $("#signBtn").addClass("layui-btn-disabled");
+          $("#signBtn").attr("disabled", "true");
+        }
+      }
+    });
+  });
+
+  // 签到记录日历元素
+  $("#recordLi").on("click", function () {
+    layui.use('laydate', function () {
+      var laydate = layui.laydate;
+
+      // 签到记录日历元素
+      $.ajax({
+        url: "/sign",
+        type: "GET",
+        data: {"userId": 5}, // 模拟用户ID
+        dataType: "JSON",
+        success: function (result) {
+          // 清空签到记录日历元素
+          $("#record").html("");
+          // 直接嵌套显示
+          laydate.render({
+            elem: '#record', // 元素ID
+            position: 'static', // 静态定位，控件将直接嵌套在指定容器中。
+            showBottom: false, // 如果设置 false，将不会显示控件的底部栏区域
+            mark: result // 标注
+          });
+        }
+      });
+    });
+  });
+
+  // 补签日历元素
+  layui.use('laydate', function () {
+    var laydate = layui.laydate;
+
+    //执行一个laydate实例
+    laydate.render({
+      elem: '#reissue' //指定元素
+    });
+  });
+
+  layui.use('layer', function () {
+    // 签到
+    $("#signBtn").on("click", function () {
+      $.ajax({
+        url: "/sign",
+        type: "POST",
+        data: {"userId": 5}, // 模拟用户ID
+        dataType: "JSON",
+        success: function (result) {
+          layer.msg(result.message);
+          if (200 == result.code) {
+            // 设置总签到次数
+            $("#count").text(result.count);
+            // 设置连续签到次数
+            $("#continuous").text(result.continuous);
+            // 设置签到按钮文本
+            $("#signBtn").text("今日已签到");
+            // 禁用签到按钮
+            $("#signBtn").addClass("layui-btn-disabled");
+            $("#signBtn").attr("disabled", "true");
+          }
+        }
+      });
+    });
+
+    // 补签
+    $("#reissueBtn").on("click", function () {
+      $.ajax({
+        url: "/sign",
+        type: "POST",
+        data: {
+          "userId": 5, // 模拟用户ID
+          "dateStr": $("#reissue").val()
+        },
+        dataType: "JSON",
+        success: function (result) {
+          layer.msg(result.message);
+          if (200 == result.code) {
+            // 设置总签到次数
+            $("#count").text(result.count);
+            // 设置连续签到次数
+            $("#continuous").text(result.continuous);
+          }
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>
